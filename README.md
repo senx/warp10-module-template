@@ -1,6 +1,6 @@
 # Create a WarpScript extension
 
-Use this template to [create a UDF](http://www.warp10.io/howto/create-a-udf/), that will add some functions to WarpScript.
+Use this template to [create a Warp 10 extension](http://www.warp10.io/howto/create-a-warpscript-extension/) that will add one or more [Warp 10 UDF](http://www.warp10.io/howto/create-a-udf/), to add personnal functions to WarpScript.
 
 ## Sources
 
