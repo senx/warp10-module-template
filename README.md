@@ -24,3 +24,6 @@ Build this project executing the following command.
 gradle shadowJar
 ```
 
+## USE
+
+The function can be simply called using the name define in the Extension class in any WarpScript executed on a Warp 10 platform launched with the extension.
