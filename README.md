@@ -1,6 +1,14 @@
 # Create a WarpScript extension
 
-Use this template to [create a Warp 10 extension](http://www.warp10.io/howto/create-a-warpscript-extension/) that will add one or more [Warp 10 UDF](http://www.warp10.io/howto/create-a-udf/), to add personnal functions to WarpScript.
+Use this template to [create a Warp 10 extension](http://www.warp10.io/howto/create-a-warpscript-extension/) that will add one or more [Warp 10 UDF](http://www.warp10.io/howto/create-a-udf/), to add custom user made functions to WarpScript.
+
+## Build
+
+Build this project executing the following command.
+
+```
+gradle shadowJar
+```
 
 ## Add this extension in a Warp10 platform
 
@@ -16,14 +24,6 @@ Finally add the compiled jar in the classpath used to launch the Warp10 platform
 
 Restart the platform.
 
-## Build
-
-Build this project executing the following command.
-
-```
-gradle shadowJar
-```
-
 ## USE
 
-The function can be simply called using the name defined in the Extension class in any WarpScript executed on a Warp 10 platform launched with the extension.
+The custom user made functions can be called using the names defined in the Extension class in any WarpScript executed on a Warp 10 platform launched with the extension.
