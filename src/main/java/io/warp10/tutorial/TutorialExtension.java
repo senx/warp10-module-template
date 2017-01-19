@@ -21,12 +21,22 @@ import io.warp10.warp.sdk.WarpScriptExtension;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Functions declared by this WarpScript extension must be present in the functions field.
+ */
 public class TutorialExtension extends WarpScriptExtension {
 
   private final Map<String,Object> functions;
 
   public TutorialExtension() {
     this.functions = new HashMap<String, Object>();
+
+    //
+    // Add the tutorial function to the tutorial extension.
+    // The key of the map entry is the command that will be available in WarpScript code.
+    // Its value is the function that will be called when the command is executed.
+    //
+
     functions.put("HELLOWARP10", new HELLOWARP10("HELLOWARP10"));
   }
 
