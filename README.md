@@ -20,7 +20,7 @@ Change Warp10 conf file to include your extension.
 //
 warpscript.extensions = io.warp10.tutorial.TutorialExtension
 ```
-Finally add the compiled jar in the classpath used to launch the Warp10 platform (for example, if you are launching the Warp10 platform using the script warp10-standalone.init provided with the sources, you have to modify the line where it sets WARP10_CP).
+Finally add the compiled jar in the classpath used to launch the Warp 10 platform (for example, if you are launching the Warp10 platform using the script warp10-standalone.init provided with the sources, you have to modify the line where it sets WARP10_CP).
 
 Restart the platform.
 
