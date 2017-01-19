@@ -24,6 +24,6 @@ Finally add the compiled jar in the classpath used to launch the Warp10 platform
 
 Restart the platform.
 
-## USE
+## Usage
 
 The custom user made functions can be called using the names defined in the Extension class in any WarpScript executed on a Warp 10 platform launched with the extension.
