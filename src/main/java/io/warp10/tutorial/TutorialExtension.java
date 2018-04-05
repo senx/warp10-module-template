@@ -1,5 +1,5 @@
 //
-//   Copyright 2017  Cityzen Data
+//   Copyright 2018  Cityzen Data
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -26,10 +26,10 @@ import java.util.Map;
  */
 public class TutorialExtension extends WarpScriptExtension {
 
-  private final Map<String,Object> functions;
+  private static final Map<String,Object> functions;
 
-  public TutorialExtension() {
-    this.functions = new HashMap<String, Object>();
+  static {
+    functions = new HashMap<String, Object>();
 
     //
     // Add the tutorial function to the tutorial extension.

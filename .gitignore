@@ -2,6 +2,3 @@
 .gradle/
 .project
 .settings/
-gradlew
-gradlew.bat
-gradle/
