@@ -14,7 +14,7 @@
 //   limitations under the License.
 //
 
-package io.warp10.tutorial;
+package ext;
 
 import io.warp10.warp.sdk.WarpScriptExtension;
 
