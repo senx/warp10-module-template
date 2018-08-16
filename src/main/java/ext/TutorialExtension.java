@@ -26,7 +26,7 @@ import java.util.Map;
  */
 public class TutorialExtension extends WarpScriptExtension {
 
-  private static final Map<String,Object> functions;
+  private static final Map<String, Object> functions;
 
   static {
     functions = new HashMap<String, Object>();

@@ -24,12 +24,13 @@ import io.warp10.script.WarpScriptStackFunction;
 public class HELLOWARP10 extends NamedWarpScriptFunction implements WarpScriptStackFunction {
 
   public HELLOWARP10(String name) {
-        super(name);
-    }
+    super(name);
+  }
 
   /**
    * This method takes as argument the current state of the WarpScript stack when the custom function is called.
    * It returns the state of the stack after the custom function have been applied.
+   *
    * @param stack
    * @return stack
    * @throws WarpScriptException
