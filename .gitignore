@@ -2,3 +2,7 @@
 .gradle/
 .project
 .settings/
+.idea/
+*.iml
+*.ipr
+*.iws
