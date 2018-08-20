@@ -23,10 +23,6 @@ repositories {
     url 'http://nexus.bedatadriven.com/content/groups/public/'
   }
 
-  maven {
-    url 'https://repository.apache.org/content/groups/public'
-  }
-
   mavenCentral()
   mavenLocal()
 }
