@@ -7,7 +7,7 @@ Use this template to [create a Warp 10 extension](http://www.warp10.io/howto/cre
 Build this project executing the following command.
 
 ```
-./gradlew build
+./gradlew shadowJar
 ```
 
 ## Add this extension in a Warp 10 platform
