@@ -78,7 +78,7 @@ idea {
 shadowJar {
     classifier = ''
     manifest {
-       attributes("Implementation-Title": "Warp 10 Template Extension")
-       attributes("Implementation-Version": "0.0.1")
+       attributes("Implementation-Title": "@EXT_DESCRIPTION@")
+       attributes("Implementation-Version": "@EXT_VERSION@")
    }
 }
