@@ -5,4 +5,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'warp10-ext-template'
+rootProject.name = '@EXT_NAME@'
