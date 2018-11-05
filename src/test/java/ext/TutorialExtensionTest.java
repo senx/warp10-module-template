@@ -15,10 +15,11 @@
 //
 package ext;
 
-import com.vividsolutions.jts.util.Assert;
 import io.warp10.WarpConfig;
 import io.warp10.script.MemoryWarpScriptStack;
 import io.warp10.script.WarpScriptLib;
+
+import com.vividsolutions.jts.util.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
