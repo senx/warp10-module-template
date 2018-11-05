@@ -16,81 +16,70 @@
 
 // Apply the java plugin to add support for Java
 plugins {
-    id 'java'
-    id 'com.github.johnrengelman.shadow' version '1.2.3'
-    id 'eclipse'
-    id 'idea'
+  id 'java'
+  id 'com.github.johnrengelman.shadow' version '2.0.4'
+  id 'eclipse'
+  id 'idea'
+}
+
+wrapper {
+  distributionType = Wrapper.DistributionType.ALL
 }
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-  	// flatDir name:'ExternalJars', dirs:'./lib'
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
-    
-    maven {
-      url 'https://dl.bintray.com/cityzendata/maven'
-    }
-    
-    maven {
-      url 'https://dl.bintray.com/hbs/maven'
-    }
-        
-    maven {
-      url "http://nexus.bedatadriven.com/content/groups/public/"
-    }
-    
-    maven {
-      url "http://repo.opengeo.org/"
-    }
-        
-    maven {
-      url 'https://repository.apache.org/content/groups/public'
-    }
-    
-    mavenCentral()
-    
-    mavenLocal()
+  jcenter()
+  
+  maven {
+    url 'https://dl.bintray.com/cityzendata/maven'
+  }
+
+  maven {
+    url 'https://dl.bintray.com/hbs/maven'
+  }
+
+  maven {
+    url 'http://nexus.bedatadriven.com/content/groups/public/'
+  }
 }
 
 configurations {
-    provided
+  provided
 }
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.13'
-    provided 'io.warp10:warpscript:1.2.24'
-	
-    // Declare the dependency for your favourite test framework you want to use in your tests.
-    // TestNG is also supported by the Gradle Test task. Just change the
-    // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
-    // 'test.useTestNG()' to your build script.
-    
-    testCompile 'junit:junit:4.12'
+  provided 'io.warp10:warpscript:+'
+
+  testCompile'io.warp10:warpscript:+'
+  testImplementation 'junit:junit:4.12'
+}
+
+test {
+  useJUnit()
 }
 
 sourceSets {
-    main {
-        compileClasspath = compileClasspath + configurations.provided
-    }
+  main {
+    compileClasspath = compileClasspath + configurations.provided
+  }
 }
 
 eclipse.classpath.plusConfigurations += [configurations.provided]  // Eclipse users only
 
 // for IntelliJ users
 idea {
-    module {
-        scopes.PROVIDED.plus += [configurations.provided]
-    }
+  module {
+    scopes.PROVIDED.plus += [configurations.provided]
+  }
 }
 
 shadowJar {
-    classifier = ''
-    manifest {
-       attributes("Implementation-Title": "@EXT_DESCRIPTION@")
-       attributes("Implementation-Version": "@EXT_VERSION@")
-   }
+  classifier = ''
+  manifest {
+   attributes('Implementation-Title': '@EXT_DESCRIPTION@')
+   attributes('Implementation-Version': '@EXT_VERSION@')
+ }
 }
+
+shadowJar.dependsOn(test)
