@@ -31,3 +31,6 @@ mv -f settings.gradle.new settings.gradle
 
 sed -e "s/@EXT_VERSION@/${VERSION}/g" -e "s/@EXT_DESCRIPTION@/${DESC}/g" build.gradle > build.gradle.new
 mv -f build.gradle.new build.gradle
+
+# Remove .git
+rm -rf .git
