@@ -1,6 +1,6 @@
 # Create a WarpScript extension
 
-Use this template to [create a Warp 10 extension](http://www.warp10.io/howto/create-a-warpscript-extension/) that will add one or more custom user made functions to WarpScript.
+Use this template to [create a Warp 10 extension](https://www.warp10.io/content/03_Documentation/07_Extending_Warp_10/03_Extensions) that will add one or more custom user made functions to WarpScript.
 
 ## Build
 
@@ -33,3 +33,25 @@ Restart the platform.
 ## Usage
 
 The custom user made functions can be called using the names defined in the Extension class in any WarpScript executed on a Warp 10 platform launched with the extension.
+
+## WarpFleet integration
+
+If you intend to reference your extension in WarpFleet, you need to publish it on a Maven repository.
+
+The `build.gradle` included in this template contains the definition of two Maven publications, `stdjar` and `uberjar` which will publish your extension either as a simple `.jar` with dependencies listed in the accompanying `.pom` file, or as an ûber jar with no external dependencies.
+
+The `build.gradle` contains a task to publish the jars on [bintray](), simply execute
+
+```
+./gradlew bintrayUpload
+```
+
+for uploading the simple jar, or
+
+```
+./gradlew -Duberjar bintrayUpload
+``
+
+to upload the über jar.
+
+Bintray user, API key and optional organization must be specified in a `gradle.properties`. Please refer to the beginning of the `build.gradle` file to learn what properties should be defined.
