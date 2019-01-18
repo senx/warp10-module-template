@@ -16,20 +16,20 @@
 #
 
 
-if [ $# != 3 ]
+if [ $# != 4 ]
 then
-  echo "Usage: $0 extension-name version \"Description\""
+  echo "Usage: $0 extension-group extension-name version \"Description\""
   exit 1
 fi
-
-NAME=$1
-VERSION=$2
-DESC=$3
+GROUP=$1
+NAME=$2
+VERSION=$3
+DESC=$4
 
 sed -e "s/@EXT_NAME@/${NAME}/g" settings.gradle > settings.gradle.new
 mv -f settings.gradle.new settings.gradle
 
-sed -e "s/@EXT_VERSION@/${VERSION}/g" -e "s/@EXT_DESCRIPTION@/${DESC}/g" build.gradle > build.gradle.new
+sed -e "s/@EXT_GROUP@/${GROUP}/g" -e "s/@EXT_VERSION@/${VERSION}/g" -e "s/@EXT_DESCRIPTION@/${DESC}/g" build.gradle > build.gradle.new
 mv -f build.gradle.new build.gradle
 
 # Remove .git
