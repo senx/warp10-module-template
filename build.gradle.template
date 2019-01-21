@@ -19,6 +19,7 @@ plugins {
   id 'com.github.johnrengelman.shadow' version '4.0.3'
   id 'eclipse'
   id 'idea'
+  id 'signing'
   id 'maven-publish'
   id 'com.jfrog.bintray' version '1.8.1'
 }
@@ -215,3 +216,17 @@ bintray {
     }
   }
 }
+
+//
+// Signing
+// You need to add 'signing.gnupg.keyName=XXXXX' in gradle.properties
+//
+
+signing {
+  if (null != System.getProperty("sign")) {
+    useGpgCmd()
+    sign publishing.publications.uberjar
+    sign publishing.publications.stdjar
+  }
+}
+
