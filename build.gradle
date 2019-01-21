@@ -91,6 +91,7 @@ task('init') {
   // Delete .git directory
   //
   delete '.git'
+  delete '*.template'
 
   doLast() {
     println 'Initialized'
