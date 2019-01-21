@@ -28,7 +28,7 @@ VERSION=$3
 DESC=$4
 
 # Create WarpScript directory
-mkdir -p "src/main/warpscript/${GROUP}/${NAME}
+mkdir -p "src/main/warpscript/${GROUP}/${NAME}"
 
 sed -e "s/@EXT_NAME@/${NAME}/g" settings.gradle > settings.gradle.new
 mv -f settings.gradle.new settings.gradle
