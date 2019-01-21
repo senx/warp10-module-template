@@ -32,7 +32,7 @@ plugins {
 def getVersionName(String revision) {
   String newRevision = revision
 
-  if (!revision.endsWith('SNAPSHOT')) {
+  if (null == System.getProperty("nogit") && !revision.endsWith('SNAPSHOT')) {
     def stdout = new ByteArrayOutputStream()
     exec {
       commandLine 'git', 'describe', '--tags', '--always'
