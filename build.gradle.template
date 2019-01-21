@@ -58,6 +58,13 @@ project.ext.bintrayRepo = 'REPO'
 project.ext.bintrayVcsUrl = 'VCS URL'
 project.ext.bintrayLicenses = [ 'LICENSE' ]
 
+//
+// GnuPG configuration for signing module
+// @see https://docs.gradle.org/current/userguide/signing_plugin.html
+//
+
+//project.ext.'signing.gnupg.keyName' = 'hhhhhhhh'
+
 
 project.ext.group = '@MODULE_GROUP@'
 project.ext.name = '@MODULE_ARTIFACT@'
@@ -217,16 +224,15 @@ bintray {
   }
 }
 
+
 //
-// Signing
-// You need to add 'signing.gnupg.keyName=XXXXX' in gradle.properties
+// Artifact Signing
 //
 
 signing {
-  if (null != System.getProperty("sign")) {
+  if (null == System.getProperty("nosign")) {
     useGpgCmd()
     sign publishing.publications.uberjar
     sign publishing.publications.stdjar
   }
 }
-
