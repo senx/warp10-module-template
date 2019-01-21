@@ -19,7 +19,7 @@ WarpScript™ [extensions](https://warp10.io/content/03_Documentation/07_Extendi
 
 ## Authoring an extension
 
-An extension is a Java class which will declare WarpScript™ functions, each function being itself a Java class.
+An extension is a Java class which declares WarpScript™ functions, each function being itself a Java class.
 
 The skeleton of the extension Java class is
 
