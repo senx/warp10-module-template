@@ -18,13 +18,17 @@
 
 if [ $# != 4 ]
 then
-  echo "Usage: $0 extension-group extension-name version \"Description\""
+  echo "Usage: $0 group name version \"Description\""
   exit 1
 fi
+
 GROUP=$1
 NAME=$2
 VERSION=$3
 DESC=$4
+
+# Create WarpScript directory
+mkdir -p "src/main/warpscript/${GROUP}/${NAME}
 
 sed -e "s/@EXT_NAME@/${NAME}/g" settings.gradle > settings.gradle.new
 mv -f settings.gradle.new settings.gradle
