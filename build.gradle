@@ -58,6 +58,7 @@ project.ext.bintrayVcsUrl = 'VCS URL'
 project.ext.bintrayLicenses = [ 'LICENSE' ]
 
 
+project.ext.type = '@EXT_TYPE@'
 project.ext.group = '@EXT_GROUP@'
 project.ext.name = '@EXT_NAME@'
 project.ext.uberjar = null != System.getProperty('uberjar')
@@ -127,10 +128,21 @@ idea {
 
 shadowJar {
   classifier = ''
+
   manifest {
-   attributes('Implementation-Title': '@EXT_DESCRIPTION@')
-   attributes('Implementation-Version': package.ext.version)
- }
+   attributes('WarpFleet-Description': '@EXT_DESCRIPTION@')
+   attributes('WarpFleet-Group': '@EXT_GROUP$')
+   attributes('WarpFleet-Artifact': '@EXT_NAME$')
+   attributes('WarpFleet-Version': '@EXT_VERSION@')
+  }
+
+  from('src/main/warpscript') {
+   //
+   // Only consider macros which are in our namespace
+   //
+   include '@EXT_GROUP@/@EXT_NAME@/*.mc2'
+   include '@EXT_GROUP@/@EXT_NAME@/**/*.mc2'
+  }
 }
 
 shadowJar.dependsOn(test)
