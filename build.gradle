@@ -91,7 +91,8 @@ task('init') {
   // Delete .git directory
   //
   delete '.git'
-  delete '*.template'
+  delete 'settings.gradle.template'
+  delete 'build.gradle.template'
 
   doLast() {
     println 'Initialized'
