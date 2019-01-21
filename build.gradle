@@ -72,6 +72,12 @@ task('init') {
     ])
   }
   //
+  // Create Java source directories
+  //
+  mkdir 'src/main/java'
+  mkdir 'src/test/java'
+
+  //
   // Create WarpScript source directory
   //
   mkdir 'src/main/warpscript/' + g + '/' + a
