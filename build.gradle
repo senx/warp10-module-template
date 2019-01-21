@@ -58,11 +58,11 @@ project.ext.bintrayVcsUrl = 'VCS URL'
 project.ext.bintrayLicenses = [ 'LICENSE' ]
 
 
-project.ext.type = '@EXT_TYPE@'
-project.ext.group = '@EXT_GROUP@'
-project.ext.name = '@EXT_NAME@'
+project.ext.type = '@MODULE_TYPE@'
+project.ext.group = '@MODULE_GROUP@'
+project.ext.name = '@MODULE_ARTIFACT@'
 project.ext.uberjar = null != System.getProperty('uberjar')
-project.ext.version = getVersionName('@EXT_VERSION@') + (project.ext.uberjar ? '-uberjar' : '')
+project.ext.version = getVersionName('@MODULE_VERSION@') + (project.ext.uberjar ? '-uberjar' : '')
 
 version project.ext.version
 
@@ -130,18 +130,18 @@ shadowJar {
   classifier = ''
 
   manifest {
-   attributes('WarpFleet-Description': '@EXT_DESCRIPTION@')
-   attributes('WarpFleet-Group': '@EXT_GROUP$')
-   attributes('WarpFleet-Artifact': '@EXT_NAME$')
-   attributes('WarpFleet-Version': '@EXT_VERSION@')
+   attributes('WarpFleet-Description': '@MODULE_DESCRIPTION@')
+   attributes('WarpFleet-Group': '@MODULE_GROUP$')
+   attributes('WarpFleet-Artifact': '@MODULE_ARTIFACT$')
+   attributes('WarpFleet-Version': '@MODULE_VERSION@')
   }
 
   from('src/main/warpscript') {
    //
    // Only consider macros which are in our namespace
    //
-   include '@EXT_GROUP@/@EXT_NAME@/*.mc2'
-   include '@EXT_GROUP@/@EXT_NAME@/**/*.mc2'
+   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
+   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
   }
 }
 

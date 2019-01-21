@@ -18,22 +18,22 @@
 
 if [ $# != 4 ]
 then
-  echo "Usage: $0 group name version \"Description\""
+  echo "Usage: $0 group artifact version \"Description\""
   exit 1
 fi
 
 GROUP=$1
-NAME=$2
+ARTIFACT=$2
 VERSION=$3
 DESC=$4
 
 # Create WarpScript directory
-mkdir -p "src/main/warpscript/${GROUP}/${NAME}"
+mkdir -p "src/main/warpscript/${GROUP}/${ARTIFACT}"
 
-sed -e "s/@EXT_NAME@/${NAME}/g" settings.gradle > settings.gradle.new
+sed -e "s/@MODULE_ARTIFACT@/${ARTIFACT}/g" settings.gradle > settings.gradle.new
 mv -f settings.gradle.new settings.gradle
 
-sed -e "s/@EXT_GROUP@/${GROUP}/g" -e "s/@EXT_VERSION@/${VERSION}/g" -e "s/@EXT_DESCRIPTION@/${DESC}/g" build.gradle > build.gradle.new
+sed -e "s/@MODULE_GROUP@/${GROUP}/g" -e 's/@MODULE_ARTIFACT@/${ARTIFACT}/g" -e "s/@MODULE_VERSION@/${VERSION}/g" -e "s/@MODULE_DESCRIPTION@/${DESC}/g" build.gradle > build.gradle.new
 mv -f build.gradle.new build.gradle
 
 # Remove .git
