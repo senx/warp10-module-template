@@ -151,7 +151,7 @@ When the Warp 10™ instance is restarted, the plugin `init` function will be ca
 
 [Authentication plugins](https://www.warp10.io/content/03_Documentation/05_Security/06_Auth_plugins#registering-an-authentication-plugin) are Warp 10™ plugin Java classes which also implement the `io.warp10.continuum.AuthenticationPlugin` interface.
 
-As part of their `init` method, those plugins will register themselves using 
+As part of their `init` method, those plugins must register themselves using 
 
 ```
 Tokens.register(this)
