@@ -1,0 +1,220 @@
+//
+//   Copyright 2019  SenX S.A.S.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
+
+plugins {
+  id 'java'
+  id 'com.github.johnrengelman.shadow' version '4.0.3'
+  id 'eclipse'
+  id 'idea'
+  id 'maven-publish'
+  id 'com.jfrog.bintray' version '1.8.1'
+}
+
+// ------------------------------------------------------------------
+//                    AUTO RELEASE MANAGEMENT
+// Gets the version name from the latest Git tag
+// if no commit occurs -> the name of the tag likes 0.0.1
+// if commit occurs -> 0.0.1-12-aabb1122 (number of commits + version number)
+// ------------------------------------------------------------------
+def getVersionName(String revision) {
+  String newRevision = revision
+
+  if (!revision.endsWith('SNAPSHOT')) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+      commandLine 'git', 'describe', '--tags', '--always'
+      standardOutput = stdout
+    }
+    newRevision = stdout.toString().trim()
+  }
+  return newRevision
+}
+
+//
+// Configure bintray elements below.
+//
+// Also add the following definitions in your gradle.properties
+//
+// bintrayUser = The user to use for uploading to bintay
+// bintrayUserOrg = The organization to use on bintray
+// bintrayApiKey = The bintray API key
+//
+
+project.ext.bintrayRepo = 'REPO'
+project.ext.bintrayVcsUrl = 'VCS URL'
+project.ext.bintrayLicenses = [ 'LICENSE' ]
+
+
+project.ext.group = '@MODULE_GROUP@'
+project.ext.name = '@MODULE_ARTIFACT@'
+project.ext.uberjar = null != System.getProperty('uberjar')
+project.ext.version = getVersionName('@MODULE_VERSION@') + (project.ext.uberjar ? '-uberjar' : '')
+
+version project.ext.version
+
+wrapper {
+  distributionType = Wrapper.DistributionType.ALL
+}
+
+//
+// Repositories for the project dependencies
+//
+
+repositories {
+  jcenter()
+  
+  maven {
+    url 'https://dl.bintray.com/senx/maven'
+  }
+
+  maven {
+    url 'https://dl.bintray.com/hbs/maven'
+  }
+}
+
+configurations {
+  provided
+}
+
+//
+// Dependencies of the project
+// Dependencies declared in the 'provided' configuration will not be added to the über jar
+//
+
+dependencies {
+  provided 'io.warp10:warpscript:+'
+
+  //
+  // Insert your dependencies here
+  //
+  //compile group: 'GROUP', name: 'NAME', version: 'VERSION'
+
+  testCompile'io.warp10:warpscript:+'
+  testImplementation 'junit:junit:4.12'
+}
+
+test {
+  useJUnit()
+}
+
+sourceSets {
+  main {
+    compileClasspath = compileClasspath + configurations.provided
+  }
+}
+
+eclipse.classpath.plusConfigurations += [configurations.provided]  // Eclipse users only
+
+// for IntelliJ users
+idea {
+  module {
+    scopes.PROVIDED.plus += [configurations.provided]
+  }
+}
+
+shadowJar {
+  classifier = ''
+
+  manifest {
+   attributes('WarpFleet-Description': '@MODULE_DESCRIPTION@')
+   attributes('WarpFleet-Group': '@MODULE_GROUP@')
+   attributes('WarpFleet-Artifact': '@MODULE_ARTIFACT@')
+   attributes('WarpFleet-Version': '@MODULE_VERSION@')
+  }
+
+  from('src/main/warpscript') {
+   //
+   // Only consider macros which are in our namespace
+   //
+   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
+   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
+  }
+}
+
+shadowJar.dependsOn(test)
+
+//
+// Maven related config
+//
+
+// Task for building the sources jar
+task sourcesJar(type: Jar) {
+  classifier = 'sources'
+  from sourceSets.main.allJava
+}
+
+publishing {
+  publications {
+    //
+    // Publication for the standard jar
+    //
+
+    stdjar(MavenPublication) {
+      groupId project.ext.group
+      artifactId project.ext.name
+      version project.ext.version
+
+      // We publish the result of the 'jar' task and the sources jar
+      from components.java 
+      artifact sourcesJar
+    }
+
+    //
+    // Publication for the über jar containing all dependencies
+    //
+
+    uberjar(MavenPublication) {
+      groupId project.ext.group
+      artifactId project.ext.name
+      version project.ext.version
+
+      // Publish the über jar and the sources
+      artifact sourcesJar
+      artifact shadowJar
+    }
+  }
+}
+
+bintray {
+  dryRun = false
+
+  user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+  key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+
+  publications = project.ext.uberjar ? [ 'uberjar' ] : ['stdjar' ]
+  publish = false
+
+  pkg {
+
+    repo = project.ext.bintrayRepo
+    name = project.ext.name
+
+    if (project.hasProperty('bintrayUserOrg') || null != System.getenv('BINTRAY_USERORG')) {
+      userOrg = project.hasProperty('bintrayUserOrg') ? project.property('bintrayUserOrg') : System.getenv('BINTRAY_USERORG')
+    }
+
+    vcsUrl = project.ext.bintrayVcsUrl
+    licenses = project.ext.bintrayLicenses
+
+    version {
+      version = version
+      released = new Date()
+    }
+  }
+}
+
+setup {
+}
