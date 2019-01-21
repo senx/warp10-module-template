@@ -108,6 +108,10 @@ When the Warp 10™ instance is restarted, the functions declared by the extensi
 
 # Plugin
 
+## Authoring a plugin
+## Building the plugin
+## Deploying the plugin
+
 # Authentication Plugin
 
 # Macro Package
@@ -119,6 +123,14 @@ If you intend to reference your extension in WarpFleet, you need to publish it o
 
 The `build.gradle` included in this template contains the definition of two Maven publications, `stdjar` and `uberjar` which will publish your extension either as a simple `.jar` with dependencies listed in the accompanying `.pom` file, or as an ûber jar with no external dependencies.
 
+## Publishing to a maven repository
+
+The `publish` task will publish the `stdjar` and `uberjar` publications to the declared maven repository (defaults to the local one).
+
+To use a specific repo, add it to the `publishing` section in the `build.gradle` file. The syntax is describe [here](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:repositories).
+
+## Publishing on bintray
+
 The `build.gradle` contains a task to publish the jars on [bintray](), simply execute
 
 ```
@@ -129,7 +141,7 @@ for uploading the simple jar, or
 
 ```
 ./gradlew -Duberjar bintrayUpload
-``
+```
 
 to upload the über jar.
 
