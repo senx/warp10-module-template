@@ -140,7 +140,7 @@ shadowJar {
    attributes('WarpFleet-Description': '@MODULE_DESCRIPTION@')
    attributes('WarpFleet-Group': '@MODULE_GROUP@')
    attributes('WarpFleet-Artifact': '@MODULE_ARTIFACT@')
-   attributes('WarpFleet-Version': '@MODULE_VERSION@')
+   attributes('WarpFleet-Version': project.ext.version)
   }
 
   from('src/main/warpscript') {
