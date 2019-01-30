@@ -133,6 +133,16 @@ idea {
   }
 }
 
+jar {
+  from('src/main/warpscript') {
+   //
+   // Only consider macros which are in our namespace
+   //
+   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
+   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
+  }
+}
+
 shadowJar {
   classifier = ''
 
