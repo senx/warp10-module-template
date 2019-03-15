@@ -45,7 +45,7 @@ repositories {
   }
 }
 
-task('init') {
+task('bootstrap') {
   //
   // Replace properties in build.gradle and settings.gradle
   //

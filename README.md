@@ -12,5 +12,5 @@ After cloning this repo, you must initialize it with informations related to you
 Such an initialization is performed using `gradlew`:
 
 ```
-./gradlew init -Pg=group -Pa=artifact -Pv=x.y.z -Pd='description of your module'
+./gradlew bootstrap -Pg=group -Pa=artifact -Pv=x.y.z -Pd='description of your module'
 ```
