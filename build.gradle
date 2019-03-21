@@ -49,52 +49,57 @@ task('bootstrap') {
   //
   // Replace properties in build.gradle and settings.gradle
   //
-  copy {
-    from(file('build.gradle.template'))
-    into(file('./'))
-    rename({ f -> 'build.gradle' })
-    filter(ReplaceTokens, tokens: [
-      MODULE_GROUP: g,
-      MODULE_ARTIFACT: a,
-      MODULE_VERSION: v,
-      MODULE_DESCRIPTION: d
-    ])
+  if(project.hasProperty('g') && project.hasProperty('a') && project.hasProperty('v') && project.hasProperty('d')) {
+    copy {
+      from(file('build.gradle.template'))
+      into(file('./'))
+      rename({ f -> 'build.gradle' })
+      filter(ReplaceTokens, tokens: [
+        MODULE_GROUP: project.findProperty('g'),
+        MODULE_ARTIFACT: project.findProperty('a'),
+        MODULE_VERSION: project.findProperty('v'),
+        MODULE_DESCRIPTION: project.findProperty('d')
+      ])
+    }
+    copy {
+      from(file('settings.gradle.template'))
+      into(file('./'))
+      rename({ f -> 'settings.gradle' })
+      filter(ReplaceTokens, tokens: [
+        MODULE_GROUP: project.findProperty('g'),
+        MODULE_ARTIFACT: project.findProperty('a'),
+        MODULE_VERSION: project.findProperty('v'),
+        MODULE_DESCRIPTION: project.findProperty('d')
+      ])
+    }
+    //
+    // Create Java source directories
+    //
+    mkdir 'src/main/java'
+    mkdir 'src/test/java'
+
+    //
+    // Create resource directory
+    //
+    mkdir 'src/main/resources'
+
+    //
+    // Create WarpScript source directory
+    //
+    mkdir 'src/main/warpscript/' + g + '/' + a
+
+    //
+    // Delete .git directory
+    //
+    delete '.git'
+    delete 'settings.gradle.template'
+    delete 'build.gradle.template'
   }
-  copy {
-    from(file('settings.gradle.template'))
-    into(file('./'))
-    rename({ f -> 'settings.gradle' })
-    filter(ReplaceTokens, tokens: [
-      MODULE_GROUP: g,
-      MODULE_ARTIFACT: a,
-      MODULE_VERSION: v,
-      MODULE_DESCRIPTION: d
-    ])
-  }
-  //
-  // Create Java source directories
-  //
-  mkdir 'src/main/java'
-  mkdir 'src/test/java'
-
-  //
-  // Create resource directory
-  //
-  mkdir 'src/main/resources'
-
-  //
-  // Create WarpScript source directory
-  //
-  mkdir 'src/main/warpscript/' + g + '/' + a
-
-  //
-  // Delete .git directory
-  //
-  delete '.git'
-  delete 'settings.gradle.template'
-  delete 'build.gradle.template'
-
   doLast() {
     println 'Initialized'
+  }
+
+  onlyIf {
+    project.hasProperty('g') && project.hasProperty('a') && project.hasProperty('v') && project.hasProperty('d')
   }
 }
