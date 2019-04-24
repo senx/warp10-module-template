@@ -141,6 +141,9 @@ jar {
    include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
    include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
   }
+  from('.') {
+    include 'README.md'
+  }
 }
 
 shadowJar {
@@ -159,6 +162,9 @@ shadowJar {
    //
    include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
    include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
+  }
+  from('.') {
+    include 'README.md'
   }
 }
 
