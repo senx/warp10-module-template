@@ -89,12 +89,56 @@ task('bootstrap') {
     mkdir 'src/main/warpscript/' + g + '/' + a
 
     //
+    // Create template if the module type was specified (either ext or plugin)
+    //
+    if (project.hasProperty('t')) {
+      def dir = g.replaceAll('\\.','/')
+      mkdir 'src/main/java/' + dir
+      
+      if ('ext' == t) {
+        copy {
+          from(file('ext.template'))
+          into(file('./src/main/java/' + dir))
+          rename({ f -> 'PleaseRenameWarpScriptExtension.java' })
+          filter(ReplaceTokens, tokens: [
+            PACKAGE_NAME: project.findProperty('g'),
+          ])
+        }
+        copy {
+          from(file('function.template'))
+          into(file('./src/main/java/' + dir))
+          rename({ f -> 'PleaseRenameFunction.java' })
+          filter(ReplaceTokens, tokens: [
+            PACKAGE_NAME: project.findProperty('g'),
+          ])
+        }
+      } else if ('plugin' == t) {
+        copy {
+          from(file('plugin.template'))
+          into(file('./src/main/java/' + dir))
+          rename({ f -> 'PleaseRenameWarp10Plugin.java' })
+          filter(ReplaceTokens, tokens: [
+            PACKAGE_NAME: project.findProperty('g'),
+          ])
+        }
+      }
+    }
+
+    //
+    // Delete templates
+    //
+    delete 'ext.template'
+    delete 'plugin.template'
+    delete 'function.template'
+    delete 'settings.gradle.template'
+    delete 'build.gradle.template'
+
+    //
     // Delete .git directory
     //
     delete '.git'
-    delete 'settings.gradle.template'
-    delete 'build.gradle.template'
   }
+
   doLast() {
     println 'Initialized'
   }
