@@ -54,9 +54,9 @@ def getVersionName(String revision) {
 // bintrayApiKey = The bintray API key
 //
 
-project.ext.bintrayRepo = 'REPO'
-project.ext.bintrayVcsUrl = 'VCS URL'
-project.ext.bintrayLicenses = [ 'LICENSE' ]
+project.ext.bintrayRepo = '@BINTRAYREPO#'
+project.ext.bintrayVcsUrl = '@VCSURL@'
+project.ext.bintrayLicenses = [ '@LICENSE@' ]
 
 //
 // GnuPG configuration for signing module
@@ -135,11 +135,11 @@ idea {
 
 jar {
   from('src/main/warpscript') {
-   //
-   // Only consider macros which are in our namespace
-   //
-   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
-   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
+    //
+    // Only consider macros which are in our namespace
+    //
+    include project.ext.group + '/' + project.ext.name + '/*.mc2'
+    include project.ext.group + '/' + project.ext.name + '/**/*.mc2'
   }
   from('.') {
     include 'README.md'
@@ -157,11 +157,11 @@ shadowJar {
   }
 
   from('src/main/warpscript') {
-   //
-   // Only consider macros which are in our namespace
-   //
-   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/*.mc2'
-   include '@MODULE_GROUP@/@MODULE_ARTIFACT@/**/*.mc2'
+    //
+    // Only consider macros which are in our namespace
+    //
+    include project.ext.group + '/' + project.ext.name + '/*.mc2'
+    include project.ext.group + '/' + project.ext.name + '/**/*.mc2'
   }
   from('.') {
     include 'README.md'
