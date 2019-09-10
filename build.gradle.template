@@ -143,6 +143,7 @@ jar {
   }
   from('.') {
     include 'README.md'
+    include 'warp10.conf'
   }
 }
 
