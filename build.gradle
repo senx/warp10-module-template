@@ -125,6 +125,16 @@ task('bootstrap') {
     }
 
     //
+    // Rename warp10.conf
+    //
+    copy {
+      from(file('warp10.conf'))
+      into(file('./'))
+      rename { f -> project.findProperty('g') + '-' + project.findProperty('a') + '.conf' }
+    }
+    delete 'warp10.conf'
+
+    //
     // Delete templates
     //
     delete 'ext.template'
