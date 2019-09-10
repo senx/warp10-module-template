@@ -143,6 +143,7 @@ jar {
   }
   from('.') {
     include 'README.md'
+    include '@MODULE_GROUP@-@MODULE_ARTIFACT@.conf'
   }
 }
 
@@ -165,6 +166,7 @@ shadowJar {
   }
   from('.') {
     include 'README.md'
+    include '@MODULE_GROUP@-@MODULE_ARTIFACT@.conf'
   }
 }
 
