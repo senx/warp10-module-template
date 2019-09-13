@@ -119,6 +119,7 @@ task('bootstrap') {
           rename({ f -> 'PleaseRenameFunction.mc2' })
           filter(ReplaceTokens, tokens: [
             MODULE_GROUP: project.findProperty('g'),
+            MODULE_ARTIFACT: project.findProperty('a'),
             MODULE_DESCRIPTION: project.findProperty('d')
           ])
         }
