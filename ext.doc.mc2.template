@@ -1,7 +1,7 @@
 // this is a function documentation. Documentation of WarpScript is in WarpScript.
 <%
   {
-    'name' 'PleaseRenameFunction'
+    'name' 'PleaseRenameFunction'   // in this example, EUCLIDIANDIVISION
     'since' '2.0.0'
     'deprecated' ''
     'deleted' ''
@@ -18,7 +18,10 @@ This function does **marvelous things**. For example, EUCLIDIANDIVISION performs
 
     'sig' [ 
 
-      // beware of the order in the signature !
+      // The signature lists the parameter your function expect on the stack, and the result your function will push to the stack
+      // There could be multiple signatures.
+      //
+      // Beware of the order in the signature !
       //   true 'toto' MYFUNCTION 'outstring' STORE 'outboolean' STORE
       //   [ [ 'top:STRING'  'n-1:BOOLEAN'  ] [ 'output_top:STRING'  'out_n-1:BOOLEAN'  ] ]
       // If you have a LIST as input or output, you must also reverse parameters inside :
@@ -26,15 +29,15 @@ This function does **marvelous things**. For example, EUCLIDIANDIVISION performs
       // You must give a type to the LIST types:
       //   LIST<GTS>     LIST<LIST<ANY>>
 
-      // for example:
-      // 'sig' [ [ [ 'a:LONG' 'b:LONG' ] [ 'q:LONG' 'r:LONG' ] ] ] // Signature
+      // for example, for EUCLIDIANDIVISION:
+      // 'sig' [ [ [ 'a:LONG' 'b:LONG' ] [ 'q:LONG' 'r:LONG' ] ] ]
       
       [ [  ]  [  ] ] 
       [ [  ]  [  ] ] 
 
     ]
 
-    // this sections describes each parameters of your function signature. for example:
+    // this sections describes each parameters of your function signature. for example, for EUCLIDIANDIVISION:
     // 
     // 'params' {
     //   // Signature params description
@@ -49,15 +52,21 @@ This function does **marvelous things**. For example, EUCLIDIANDIVISION performs
     }
 
     // relate do other interesting/close WarpScript functions
-    'related' [ '/' ]
+    // for example, for EUCLIDIANDIVISION:
+    // 'related' [ '/' ]  
+    'related' [ ]
+    
 
-
-    // any multiline example you want
+    // Examples of your function use. Their could be several examples in the list. 
     'examples' [ 
 <'
+// Example 1
 10 3 EUCLIDIANDIVISION [ 'q' 'r' ] STORE
 'quotient is:  ' $q TOSTRING +
 'remainder is: ' $r TOSTRING +
+'>
+<'
+// Example 2
 '>
     ]
 
