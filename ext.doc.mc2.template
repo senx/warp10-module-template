@@ -9,7 +9,7 @@
     'tags' [ 'extensions' ]
     'desc' 
       <'
-This function does **marvelous things**. For example, an euclidian division
+This function does **marvelous things**. For example, EUCLIDIANDIVISION performs an euclidian division.
 - Markdown is allowed here
 
 @MODULE_DESCRIPTION@
@@ -54,7 +54,7 @@ This function does **marvelous things**. For example, an euclidian division
   //any multiline example you want
     'examples' [ 
 <'
-10 3 @mymacros/euclideanDivision [ 'q' 'r' ] STORE
+10 3 EUCLIDIANDIVISION [ 'q' 'r' ] STORE
 'quotient is  :' $q TOSTRING +
 'remainder is :' $r TOSTRING +
 '>
