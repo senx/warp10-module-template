@@ -1,0 +1,117 @@
+package @PACKAGE_NAME@;
+
+import io.warp10.script.WarpScriptException;
+import io.warp10.script.WarpScriptStack;
+import io.warp10.script.formatted.FormattedWarpScriptFunction;
+import java.util.Map;
+
+/**
+ * A Warpscript function class that handles argument retrieval automatically.
+ * This includes throwing error messages if wrong arguments are given, generating documentation and unit tests.
+ */
+public class PleaseRenameFormattedFunction extends FormattedWarpScriptFunction {
+
+  public static final String ARG_1 = "name of first argument";
+  public static final String ARG_2 = "name of second argument";
+  // ...
+
+  private final Arguments args;
+  protected Arguments getArguments() { return args; }
+
+  public PleaseRenameFormattedFunction(String name) {
+    super(name);
+
+    getDocstring().append("Insert documentation here.");
+
+    //
+    // Declare arguments.
+    //
+    // The function will expect arguments on the stack in the order they are added to the ArgumentBuilder.
+    // To add an argument : builder.addArgument(expected class, argument name, explanation)
+    // To add an argument of type List : .addListArgument(expected sub class, argument name, explanation)
+    //
+    // However, if a map is on top of the stack, the function will expect that its arguments are in this map {name:value}
+    // Optional arguments can be passed using this map. They are declared with addOptionalArgument() or addOptionalListArgument()
+    //
+
+    args = new ArgumentsBuilder()
+      .addArgument(Object.class, ARG_1, "Insert argument explanation here") // please change Object.class
+      .addOptionalArgument(Object.class, ARG_2, "Insert argument explanation here", "Insert default value here") // an optional argument
+      .build();
+  }
+
+  @Override
+  protected WarpScriptStack apply(Map<String, Object> formattedArgs, WarpScriptStack stack) throws WarpScriptException {
+
+    //
+    // Retrieve arguments here
+    //
+
+    // Object o = (Object) formattedArgs.get(ARG_1); ...
+
+    //
+    // Insert your function code here
+    //
+
+    return stack;
+  }
+
+  //
+  // Optional code below is for generating documentation and unit testing.
+  //
+
+  //  @Override
+  //  protected List<String> getUnitTests() {
+  //
+  //    List<String> unitTests = new ArrayList<String>();
+  //
+  //    //
+  //    // Write your unit tests in WarpScript here
+  //    //
+  //
+  //    unitTests.add("'arg1' " + getName() + " true ASSERT");
+  //
+  //    return unitTests;
+  //  }
+  //
+  //  public static void main(String[] args) {
+  //    FormattedWarpScriptFunction function = new PleaseRenameFormattedFunction("PleaseRenameWarpScriptFunction");
+  //    List<ArgumentSpecification> outputs = new ArrayList<>();
+  //    outputs.add(new ArgumentSpecification(Object.class, "output")); // please change to expected class
+  //
+  //    try {
+  //
+  //      //
+  //      // Generate Documentation in the form of a Warpscript code with unit tests
+  //      //
+  //
+  //      String mc2 = DocumentationGenerator.generateWarpScriptDoc(function, outputs);
+  //
+  //      StringBuilder props = new StringBuilder();
+  //      props.append("warp.timeunits=us");
+  //      WarpConfig.safeSetProperties(new StringReader(props.toString()));
+  //      MemoryWarpScriptStack stack = new MemoryWarpScriptStack(null, null);
+  //      stack.maxLimits();
+  //
+  //      //
+  //      // Run unit tests
+  //      //
+  //
+  //      stack.execMulti(mc2);
+  //
+  //      //
+  //      // Print function documentation
+  //      //
+  //
+  //      stack.clear()
+  //      stack.execMulti("INFOMODE " + mc2);
+  //
+  //    } catch (WarpScriptStopException stop) {
+  //      System.out.println(stack.dump(1));
+  //
+  //    } catch (Exception e) {
+  //      throw new RuntimeException(e);
+  //    }
+  //  }
+
+}

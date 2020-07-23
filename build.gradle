@@ -114,6 +114,14 @@ task('bootstrap') {
           ])
         }
         copy {
+          from(file('formattedFunction.template'))
+          into(file('./src/main/java/' + dir))
+          rename({ f -> 'PleaseRenameFormattedFunction.java' })
+          filter(ReplaceTokens, tokens: [
+                  PACKAGE_NAME: project.findProperty('g'),
+          ])
+        }
+        copy {
           from(file('ext.doc.mc2.template'))
           into(file(wsdir))
           rename({ f -> 'PleaseRenameFunction.mc2' })
@@ -151,6 +159,7 @@ task('bootstrap') {
     delete 'ext.template'
     delete 'plugin.template'
     delete 'function.template'
+    delete 'formattedFunction.template'
     delete 'settings.gradle.template'
     delete 'build.gradle.template'
 
