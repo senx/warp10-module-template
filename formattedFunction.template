@@ -33,6 +33,9 @@ public class PleaseRenameFormattedFunction extends FormattedWarpScriptFunction {
     // However, if a map is on top of the stack, the function will expect that its arguments are in this map {name:value}
     // Optional arguments can be passed using this map. They are declared with addOptionalArgument() or addOptionalListArgument()
     //
+    // First argument can be declared list-expandable using: builder.firstArgIsListExpandable()
+    // In that case, the function will be applied for each element of the list, and will output a list of the results.
+    //
 
     args = new ArgumentsBuilder()
       .addArgument(Object.class, ARG_1, "Insert argument explanation here") // please change Object.class
