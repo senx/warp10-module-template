@@ -100,7 +100,7 @@ The `jar` and `shadowJar` gradle tasks will build the extension and package it i
 
 The extension must then be declared in the configuration file of the Warp 10™ instance using the following syntax:
 
-```
+```properties
 warpscript.extension.NAME = your.extension.package.ANDCLASS
 ```
 
@@ -141,7 +141,7 @@ The jar file of the plugin must be available in the classpath of the Warp 10™ 
 
 The plugin must then be declared in the configuration file of the Warp 10™ instance using the following syntax:
 
-```
+```properties
 warpscript.plugin.NAME = your.plugin.package.ANDCLASS
 ```
 
@@ -153,7 +153,7 @@ When the Warp 10™ instance is restarted, the plugin `init` function will be ca
 
 As part of their `init` method, those plugins must register themselves using 
 
-```
+```java
 Tokens.register(this)
 ```
 
@@ -166,27 +166,25 @@ If you intend to reference your extension in WarpFleet, you need to publish it o
 
 The `build.gradle` included in this template contains the definition of a Maven publication `module` which will publish your extension either as a simple `.jar` with dependencies listed in the accompanying `.pom` file, or as an ûber jar with no external dependencies.
 
-## Publishing to a maven repository
-
-The `publish` task will publish the standard jar or `uberjar` (if `-Duberjar` is specified) publications to the declared maven repository (defaults to the local one).
-
-To use a specific repo, add it to the `publishing` section in the `build.gradle` file. The syntax is described [here](https://docs.gradle.org/current/userguide/publishing_maven.html#publishing_maven:repositories).
 
 ## Publishing to Maven Central via Sonatype OSSRH
 
-The `build.gradle` contains a task to publish the jars on Maven Central, simply execute
+The `build.gradle` contains a task to publish the jars on Maven Central.
+Assuming you own the group.id, simply execute:
 
-```
+```bash
 ./gradlew publishToSonatype closeAndReleaseStagingRepository
 ```
 
-for uploading the simple jar, or
-
-```
-./gradlew -Duberjar publishToSonatype closeAndReleaseStagingRepository
-```
-
-to upload the über jar.
+This will publish the simple jar and the über jar.
 
 You need to set your Nexus credentials with `sonatypeUsername` and `sonatypePassword` properties.
 You need also to provide your gpg key with `signing.gnupg.keyName`
+
+---
+
+Here is an example to add to your `build.gradle` if you have a project depending on a Warp 10 module:
+```groovy
+  implementation group: 'io.warp10', name: 'warp10-ext-s3', version: '1.0.1', classifier: 'uberjar'
+  ```
+
