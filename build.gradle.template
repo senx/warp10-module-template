@@ -77,7 +77,7 @@ jar {
 
   from('.') {
     include 'README.md'
-    include '@MODULE_GROUP@-@MODULE_ARTIFACT@.conf'
+    include project.group + '-' + project.name + '.conf'
   }
 }
 
@@ -94,7 +94,7 @@ shadowJar {
 
   from('.') {
     include 'README.md'
-    include '@MODULE_GROUP@-@MODULE_ARTIFACT@.conf'
+    include project.group + '-' + project.name + '.conf'
   }
 }
 
