@@ -1,5 +1,5 @@
 //
-//   Copyright 2019  SenX S.A.S.
+//   Copyright 2019 -2021  SenX S.A.S.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -18,15 +18,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 plugins {
   id 'java'
-  id 'com.github.johnrengelman.shadow' version '4.0.3'
-  id 'eclipse'
-  id 'idea'
-  id 'maven-publish'
-  id 'com.jfrog.bintray' version '1.8.1'
-}
-
-wrapper {
-  distributionType = Wrapper.DistributionType.ALL
 }
 
 //
@@ -34,15 +25,7 @@ wrapper {
 //
 
 repositories {
-  jcenter()
-  
-  maven {
-    url 'https://dl.bintray.com/senx/maven'
-  }
-
-  maven {
-    url 'https://dl.bintray.com/hbs/maven'
-  }
+  mavenCentral()
 }
 
 task('bootstrap') {
@@ -95,7 +78,7 @@ task('bootstrap') {
     if (project.hasProperty('t')) {
       def dir = g.replaceAll('\\.','/')
       mkdir 'src/main/java/' + dir
-      
+
       if ('ext' == t) {
         copy {
           from(file('ext.template'))
