@@ -8,9 +8,10 @@ After cloning this repo, you must initialize it with information related to your
 * The module **artifact**, this is the *artifactId* of your published module
 * The module initial **version**
 * The module **description**
+* (optional) The module **type** (ext|plugin)
 
 Such an initialization is performed using `./gradlew`:
 
-```
-./gradlew bootstrap -Pg=group -Pa=artifact -Pv=x.y.z -Pd='description of your module'
+```bash
+./gradlew bootstrap -Pg=group -Pa=artifact -Pv=x.y.z -Pd='description of your module' -Pt=type
 ```
