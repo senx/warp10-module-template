@@ -82,7 +82,7 @@ jar {
 }
 
 shadowJar {
-  classifier = 'uberjar'
+  archiveClassifier.set('uberjar')
 
   from('src/main/warpscript') {
     //
@@ -145,10 +145,12 @@ nexusPublishing {
 }
 
 //
-// Artifact Signing
+// Artifact Signing only if signing key name is in the properties
 //
 
-signing {
-  useGpgCmd()
-  sign publishing.publications
+if (project.hasProperty("signing.gnupg.keyName")) {
+  signing {
+    useGpgCmd()
+    sign publishing.publications
+  }
 }
