@@ -1,5 +1,5 @@
 //
-//   Copyright 2019  SenX S.A.S.
+//   Copyright 2019 - 2021  SenX S.A.S.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -15,254 +15,140 @@
 //
 
 plugins {
-  id 'java'
-  id 'com.github.johnrengelman.shadow' version '4.0.3'
-  id 'eclipse'
-  id 'idea'
-  id 'signing'
+  id 'java-library'
   id 'maven-publish'
-  id 'com.jfrog.bintray' version '1.8.1'
+  id 'signing'
+  id 'com.github.johnrengelman.shadow' version '7.0.0'
+  id 'net.nemerosa.versioning' version '2.14.0'
+  id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 
-// ------------------------------------------------------------------
-//                    AUTO RELEASE MANAGEMENT
-// Gets the version name from the latest Git tag
-// if no commit occurs -> the name of the tag likes 0.0.1
-// if commit occurs -> 0.0.1-12-aabb1122 (number of commits + version number)
-// ------------------------------------------------------------------
-def getVersionName(String revision) {
-  String newRevision = revision
+project.group = '@MODULE_GROUP@'
+project.description = '@MODULE_DESCRIPTION@'
 
-  if (null == System.getProperty("nogit") && !revision.endsWith('SNAPSHOT')) {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-      commandLine 'git', 'describe', '--tags', '--always'
-      standardOutput = stdout
-    }
-    newRevision = stdout.toString().trim()
-  }
-  return newRevision
-}
-
-//
-// Configure bintray elements below.
-//
-// Also add the following definitions in your gradle.properties
-//
-// bintrayUser = The user to use for uploading to bintay
-// bintrayUserOrg = The organization to use on bintray
-// bintrayApiKey = The bintray API key
-//
-
-project.ext.bintrayRepo = '@BINTRAYREPO#'
-project.ext.bintrayVcsUrl = '@VCSURL@'
-project.ext.bintrayLicenses = [ '@LICENSE@' ]
-
-//
-// GnuPG configuration for signing module
-// @see https://docs.gradle.org/current/userguide/signing_plugin.html
-//
-
-//project.ext.'signing.gnupg.keyName' = 'hhhhhhhh'
-
-
-project.ext.group = '@MODULE_GROUP@'
-project.ext.name = '@MODULE_ARTIFACT@'
-project.ext.uberjar = null != System.getProperty('uberjar')
-project.ext.version = getVersionName('@MODULE_VERSION@') + (project.ext.uberjar ? '-uberjar' : '')
-
-version project.ext.version
-
-wrapper {
-  distributionType = Wrapper.DistributionType.ALL
-}
+// If the current tag is set, then it's a new release. Don't add build number
+project.version = versioning.info.lastTag + ((versioning.info.tag != null) ? '' : '-' + versioning.info.build)
 
 //
 // Repositories for the project dependencies
 //
 
 repositories {
-  jcenter()
-  
-  maven {
-    url 'https://dl.bintray.com/senx/maven'
-  }
-
-  maven {
-    url 'https://dl.bintray.com/hbs/maven'
-  }
-}
-
-configurations {
-  provided
+  mavenCentral()
 }
 
 //
 // Dependencies of the project
-// Dependencies declared in the 'provided' configuration will not be added to the über jar
 //
 
 dependencies {
-  provided 'io.warp10:warpscript:+'
-
   //
   // Insert your dependencies here
   //
-  //compile group: 'GROUP', name: 'NAME', version: 'VERSION'
+  //implementation group: 'GROUP', name: 'NAME', version: 'VERSION', classifier: 'CLASSIFIER'
 
-  testCompile'io.warp10:warpscript:+'
-  testImplementation 'junit:junit:4.12'
+  // Use JUnit test framework.
+  testImplementation 'junit:junit:4.13'
+
+  // Compile time only dependencies, not used at runtime, or provided by other dependencies.
+  compileOnly group: 'io.warp10', name: 'warpscript', version: '2.+'
 }
 
-test {
-  useJUnit()
-}
-
-sourceSets {
-  main {
-    compileClasspath = compileClasspath + configurations.provided
-  }
-}
-
-eclipse.classpath.plusConfigurations += [configurations.provided]  // Eclipse users only
-
-// for IntelliJ users
-idea {
-  module {
-    scopes.PROVIDED.plus += [configurations.provided]
-  }
+java {
+  withJavadocJar()
+  withSourcesJar()
 }
 
 jar {
+  manifest {
+   attributes('WarpFleet-Description': project.description)
+   attributes('WarpFleet-Group': project.group)
+   attributes('WarpFleet-Artifact': project.name)
+   attributes('WarpFleet-Version': project.version)
+  }
+
   from('src/main/warpscript') {
     //
     // Only consider macros which are in our namespace
     //
-    include project.ext.group + '/' + project.ext.name + '/*.mc2'
-    include project.ext.group + '/' + project.ext.name + '/**/*.mc2'
+    include project.group + '/' + project.name + '/*.mc2'
+    include project.group + '/' + project.name + '/**/*.mc2'
   }
+
   from('.') {
     include 'README.md'
-    include '@MODULE_GROUP@-@MODULE_ARTIFACT@.conf'
+    include project.group + '-' + project.name + '.conf'
   }
 }
 
 shadowJar {
-  classifier = ''
-
-  manifest {
-   attributes('WarpFleet-Description': '@MODULE_DESCRIPTION@')
-   attributes('WarpFleet-Group': project.ext.group)
-   attributes('WarpFleet-Artifact': project.ext.name)
-   attributes('WarpFleet-Version': project.ext.version)
-  }
+  classifier = 'uberjar'
 
   from('src/main/warpscript') {
     //
     // Only consider macros which are in our namespace
     //
-    include project.ext.group + '/' + project.ext.name + '/*.mc2'
-    include project.ext.group + '/' + project.ext.name + '/**/*.mc2'
+    include project.group + '/' + project.name + '/*.mc2'
+    include project.group + '/' + project.name + '/**/*.mc2'
   }
+
   from('.') {
     include 'README.md'
-    include '@MODULE_GROUP@-@MODULE_ARTIFACT@.conf'
+    include project.group + '-' + project.name + '.conf'
   }
 }
 
-shadowJar.dependsOn(test)
 
 //
 // Maven related config
 //
 
-// Task for building the sources jar
-task sourcesJar(type: Jar) {
-  classifier = 'sources'
-  from sourceSets.main.allJava
-}
-
-javadoc {
-  source = sourceSets.main.allJava
-  classpath = configurations.compile
-}
-
-task javadocJar(type: Jar) {
-  classifier = 'javadoc'
-}
-
-javadocJar.dependsOn(javadoc)
-
 publishing {
   publications {
-    //
-    // Publication for the standard jar
-    //
+    module(MavenPublication) {
+      from components.java
 
-    stdjar(MavenPublication) {
-      groupId project.ext.group
-      artifactId project.ext.name
-      version project.ext.version
+      pom {
+        name = project.name
+        description = project.description
+        url = 'https://github.com/senx/' + project.name
 
-      // We publish the result of the 'jar' task and the sources jar
-      from components.java 
-      artifact sourcesJar
-      artifact javadocJar
-    }
+        scm {
+          connection = 'scm:git:git://github.com/senx/' + project.name
+          developerConnection = 'scm:git:ssh://github.com/senx/' + project.name
+          url = 'https://github.com/senx/' + project.name
+        }
 
-    //
-    // Publication for the über jar containing all dependencies
-    //
+        licenses {
+          license {
+            name = 'The Apache License, Version 2.0'
+            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
+        }
 
-    uberjar(MavenPublication) {
-      groupId project.ext.group
-      artifactId project.ext.name
-      version project.ext.version
-
-      // Publish the über jar and the sources
-      artifact sourcesJar
-      artifact shadowJar
-    }
-  }
-}
-
-bintray {
-  dryRun = false
-
-  user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-  key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-
-  publications = project.ext.uberjar ? [ 'uberjar' ] : ['stdjar' ]
-  publish = null != System.getProperty('publish')
-
-  pkg {
-
-    repo = project.ext.bintrayRepo
-    name = project.ext.name
-
-    if (project.hasProperty('bintrayUserOrg') || null != System.getenv('BINTRAY_USERORG')) {
-      userOrg = project.hasProperty('bintrayUserOrg') ? project.property('bintrayUserOrg') : System.getenv('BINTRAY_USERORG')
-    }
-
-    vcsUrl = project.ext.bintrayVcsUrl
-    licenses = project.ext.bintrayLicenses
-
-    version {
-      version = version
-      released = new Date()
+        developers {
+          developer {
+            id = 'senx'
+            name = 'SenX'
+            email = 'contact@senx.io'
+          }
+        }
+      }
     }
   }
 }
 
+nexusPublishing {
+  repositories {
+    sonatype()
+  }
+}
 
 //
 // Artifact Signing
 //
 
 signing {
-  if (null == System.getProperty("nosign")) {
-    useGpgCmd()
-    sign publishing.publications.uberjar
-    sign publishing.publications.stdjar
-  }
+  useGpgCmd()
+  sign publishing.publications
 }
