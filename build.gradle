@@ -29,10 +29,14 @@ repositories {
 }
 
 task('bootstrap') {
+  onlyIf {
+    project.hasProperty('g') && project.hasProperty('a') && project.hasProperty('d')
+  }
+
   //
   // Replace properties in build.gradle and settings.gradle
   //
-  if(project.hasProperty('g') && project.hasProperty('a') && project.hasProperty('v') && project.hasProperty('d')) {
+  doLast {
     copy {
       from(file('build.gradle.template'))
       into(file('./'))
@@ -40,7 +44,6 @@ task('bootstrap') {
       filter(ReplaceTokens, tokens: [
         MODULE_GROUP: project.findProperty('g'),
         MODULE_ARTIFACT: project.findProperty('a'),
-        MODULE_VERSION: project.findProperty('v'),
         MODULE_DESCRIPTION: project.findProperty('d')
       ])
     }
@@ -51,7 +54,6 @@ task('bootstrap') {
       filter(ReplaceTokens, tokens: [
         MODULE_GROUP: project.findProperty('g'),
         MODULE_ARTIFACT: project.findProperty('a'),
-        MODULE_VERSION: project.findProperty('v'),
         MODULE_DESCRIPTION: project.findProperty('d')
       ])
     }
@@ -141,13 +143,7 @@ task('bootstrap') {
     // Delete .git directory
     //
     delete '.git'
-  }
 
-  doLast() {
     println 'Initialized'
-  }
-
-  onlyIf {
-    project.hasProperty('g') && project.hasProperty('a') && project.hasProperty('v') && project.hasProperty('d')
   }
 }
