@@ -1,5 +1,5 @@
 //
-//   Copyright 2019 - 2021  SenX S.A.S.
+//   Copyright 2019 - 2023  SenX S.A.S.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -14,17 +14,28 @@
 //   limitations under the License.
 //
 
+buildscript{
+  repositories {
+      mavenCentral()
+      mavenLocal()
+      dependencies{
+        classpath 'io.warp10:warpfleet-gradle-plugin:0.0.3'
+      }
+  }
+}
 plugins {
   id 'java-library'
   id 'maven-publish'
   id 'signing'
   id 'com.github.johnrengelman.shadow' version '7.0.0'
   id 'net.nemerosa.versioning' version '2.14.0'
-  id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
+apply plugin: 'io.warp10.warpfleet-gradle-plugin'
+
 
 project.group = '@MODULE_GROUP@'
 project.description = '@MODULE_DESCRIPTION@'
+project.version  = '@MODULE_VERSION@'
 
 // If the current tag is set, then it's a new release. Don't add build number
 project.version = versioning.info.lastTag + ((versioning.info.tag != null) ? '' : '-' + versioning.info.build)

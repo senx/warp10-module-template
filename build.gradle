@@ -1,5 +1,5 @@
 //
-//   Copyright 2019 - 2021  SenX S.A.S.
+//   Copyright 2019 - 2023  SenX S.A.S.
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 //
 
 import org.apache.tools.ant.filters.ReplaceTokens
-
+import groovy.json.JsonOutput
 plugins {
   id 'java'
 }
@@ -29,10 +29,54 @@ repositories {
 }
 
 task('bootstrap') {
+  def group
+  def artifact
+  def version
+  def description
+  def type
+
+  if(!project.hasProperty('t')) {
+    println "What kind of module (ext / plugin / macro)? : "
+    type = System.in.newReader().readLine()
+    println "Type is ${type}"
+  } else {
+    type = project.findProperty('t')
+  }
+
+  if(!project.hasProperty('g')) {
+    println "Enter project's group (ie: io.warp10.ext.example): "
+    group = System.in.newReader().readLine()
+    println "Group is ${group}"
+  } else {
+    group = project.findProperty('g')
+  }
+
+  if(!project.hasProperty('a')) {
+    println "Enter project's artifact (ie: warp10-ext-my-awesome-module): "
+    artifact = System.in.newReader().readLine()
+    println "Artifact is ${artifact}"
+  } else {
+    artifact = project.findProperty('a')
+  }
+
+  if(!project.hasProperty('d')) {
+    println "Enter project's description: "
+    description = System.in.newReader().readLine()
+    println "Artifact description: ${description}"
+  } else {
+    description = project.findProperty('d')
+  }
+
+  if(!project.hasProperty('v')) {
+    version = '0.0.1'
+  } else {
+    version = project.findProperty('v')
+  }
+
   onlyIf {
     project.hasProperty('g') && project.hasProperty('a') && project.hasProperty('d')
   }
-
+  println "Generating ${group}:${artifact}:${version}"
   //
   // Replace properties in build.gradle and settings.gradle
   //
@@ -42,9 +86,10 @@ task('bootstrap') {
       into(file('./'))
       rename({ f -> 'build.gradle' })
       filter(ReplaceTokens, tokens: [
-        MODULE_GROUP: project.findProperty('g'),
-        MODULE_ARTIFACT: project.findProperty('a'),
-        MODULE_DESCRIPTION: project.findProperty('d')
+              MODULE_GROUP: "${group}".toString(),
+              MODULE_ARTIFACT: "${artifact}".toString(),
+              MODULE_DESCRIPTION: "${description}".toString(),
+              MODULE_VERSION: "${version}".toString()
       ])
     }
     copy {
@@ -52,9 +97,9 @@ task('bootstrap') {
       into(file('./'))
       rename({ f -> 'settings.gradle' })
       filter(ReplaceTokens, tokens: [
-        MODULE_GROUP: project.findProperty('g'),
-        MODULE_ARTIFACT: project.findProperty('a'),
-        MODULE_DESCRIPTION: project.findProperty('d')
+              MODULE_GROUP: "${group}".toString(),
+              MODULE_ARTIFACT: "${artifact}".toString(),
+              MODULE_DESCRIPTION: "${description}".toString(),
       ])
     }
     //
@@ -77,17 +122,17 @@ task('bootstrap') {
     //
     // Create template if the module type was specified (either ext or plugin)
     //
-    if (project.hasProperty('t')) {
+    if (type) {
       def dir = g.replaceAll('\\.','/')
       mkdir 'src/main/java/' + dir
 
-      if ('ext' == t) {
+      if ('ext' == type) {
         copy {
           from(file('ext.template'))
           into(file('./src/main/java/' + dir))
           rename({ f -> 'PleaseRenameWarpScriptExtension.java' })
           filter(ReplaceTokens, tokens: [
-            PACKAGE_NAME: project.findProperty('g'),
+                  PACKAGE_NAME: "${group}".toString(),
           ])
         }
         copy {
@@ -95,7 +140,7 @@ task('bootstrap') {
           into(file('./src/main/java/' + dir))
           rename({ f -> 'PleaseRenameFunction.java' })
           filter(ReplaceTokens, tokens: [
-            PACKAGE_NAME: project.findProperty('g'),
+                  PACKAGE_NAME: "${group}".toString(),
           ])
         }
         copy {
@@ -103,18 +148,18 @@ task('bootstrap') {
           into(file(wsdir))
           rename({ f -> 'PleaseRenameFunction.mc2' })
           filter(ReplaceTokens, tokens: [
-            MODULE_GROUP: project.findProperty('g'),
-            MODULE_ARTIFACT: project.findProperty('a'),
-            MODULE_DESCRIPTION: project.findProperty('d')
+                  MODULE_GROUP: "${group}".toString(),
+                  MODULE_ARTIFACT: "${artifact}".toString(),
+                  MODULE_DESCRIPTION: "${description}".toString()
           ])
         }
-      } else if ('plugin' == t) {
+      } else if ('plugin' == type) {
         copy {
           from(file('plugin.template'))
           into(file('./src/main/java/' + dir))
           rename({ f -> 'PleaseRenameWarp10Plugin.java' })
           filter(ReplaceTokens, tokens: [
-            PACKAGE_NAME: project.findProperty('g'),
+                  PACKAGE_NAME: "${group}".toString(),
           ])
         }
       }
@@ -126,7 +171,7 @@ task('bootstrap') {
     copy {
       from(file('warp10.conf'))
       into(file('./'))
-      rename { f -> project.findProperty('g') + '-' + project.findProperty('a') + '.conf' }
+      rename { f -> group + '-' + artifact + '.conf' }
     }
     delete 'warp10.conf'
 
@@ -143,7 +188,28 @@ task('bootstrap') {
     // Delete .git directory
     //
     delete '.git'
+    def json = JsonOutput.toJson([
+            group: group,
+            artifact: artifact,
+            version: version,
+            description: description,
+            type: type,
+            classifier: "",
+            license: "Apache-2",
+            git: "https://github.com/${group}/${artifact}",
+            author: System.getProperty("user.name"),
+            email: "",
+            repoUrl: "https://repo.maven.apache.org/maven2/${group.toString().replaceAll('\\.', '/')}/${artifact}",
+            tags: [],
+            conf: [],
+            macros: [],
+            dependencies: []
+    ])
+    File file = new File("wf.json")
+    file.write(JsonOutput.prettyPrint(json))
+    File readme = new File("README.md")
+    readme.write("# ${group + '-' + artifact}\n\n${description}")
 
-    println 'Initialized'
+    println 'Initialized, please check wf.json'
   }
 }

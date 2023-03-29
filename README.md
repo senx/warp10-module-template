@@ -1,6 +1,6 @@
-# Warp 10™ Modules
+# Warp 10 Modules
 
-This repository contains a template for creating Warp 10™ modules such as extensions, plugins, authentication plugins or macro packages.
+This repository contains a template for creating Warp 10 modules such as extensions, plugins, authentication plugins or macro packages.
 
 After cloning this repo, you must initialize it with information related to your module, namely:
 
