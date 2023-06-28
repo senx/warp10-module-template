@@ -28,7 +28,6 @@ plugins {
   id 'maven-publish'
   id 'signing'
   id 'com.github.johnrengelman.shadow' version '7.0.0'
-  id 'net.nemerosa.versioning' version '2.14.0'
   id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
 }
 apply plugin: 'io.warp10.warpfleet-gradle-plugin'
@@ -38,8 +37,7 @@ project.group = '@MODULE_GROUP@'
 project.description = '@MODULE_DESCRIPTION@'
 project.version  = '@MODULE_VERSION@'
 
-// If the current tag is set, then it's a new release. Don't add build number
-project.version = versioning.info.lastTag + ((versioning.info.tag != null) ? '' : '-' + versioning.info.build)
+project.version = getVersionFromGit()
 
 //
 // Repositories for the project dependencies
@@ -165,4 +163,19 @@ if (project.hasProperty("signing.gnupg.keyName")) {
     useGpgCmd()
     sign publishing.publications
   }
+}
+
+def getVersionFromGit() {
+    def nogit = System.getProperty("nogit")
+    if (null != nogit) {
+        // Override version with the property value. To remove the version altogether use '-Dnogit' without value.
+        return nogit
+    } else {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags', '--always'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
 }
