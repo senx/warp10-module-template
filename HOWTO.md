@@ -1,12 +1,12 @@
-# Warp 10™ Modules
+# Warp 10 Modules
 
-Warp 10™ is very modular, you can augment or modify the features of a Warp 10™ deployment through the use of several mechanisms commonly called **modules**.
+Warp 10 is very modular, you can augment or modify the features of a Warp 10 deployment through the use of several mechanisms commonly called **modules**.
 
 The four types of modules are:
 
-* WarpScript™ Extensions (`extensions`)
-* Warp 10™ Plugins (`plugins`)
-* Warp 10™ Authentication Plugins (`authplugins`)
+* WarpScript Extensions (`extensions`)
+* Warp 10 Plugins (`plugins`)
+* Warp 10 Authentication Plugins (`authplugins`)
 * Macro Packages (`packages`)
 
 All those module types can be created using this template.
@@ -15,11 +15,11 @@ Modules can be private, *i.e.* their use is limited to your organization, or pub
 
 # Extension
 
-WarpScript™ [extensions](https://warp10.io/content/03_Documentation/07_Extending_Warp_10/03_Extensions) add, remove or modify functions.
+WarpScript [extensions](https://warp10.io/content/03_Documentation/07_Extending_Warp_10/03_Extensions) add, remove or modify functions.
 
 ## Authoring an extension
 
-An extension is a Java class which declares WarpScript™ functions, each function being itself a Java class.
+An extension is a Java class which declares WarpScript functions, each function being itself a Java class.
 
 The skeleton of the extension Java class is
 
@@ -43,7 +43,7 @@ public class MyExtension extends WarpScriptExtension {
     //
     // Declare the functions in the 'functions' map
     //
-    // The key is name of the WarpScript™ function
+    // The key is name of the WarpScript function
     // The value is an instance of the associated Java class
     //
 
@@ -96,19 +96,19 @@ The `jar` and `shadowJar` gradle tasks will build the extension and package it i
 
 ## Using an extension
 
-[Extensions](https://warp10.io/content/03_Documentation/07_Extending_Warp_10/03_Extensions) must be deployed in the classpath of the Warp 10™ instance, typically by placing their `.jar` file in the `lib` directory of the Warp 10™ installation. We recommend you use the über jar as you do not have to worry about copying the dependencies jar files as they are already included.
+[Extensions](https://warp10.io/content/03_Documentation/07_Extending_Warp_10/03_Extensions) must be deployed in the classpath of the Warp 10 instance, typically by placing their `.jar` file in the `lib` directory of the Warp 10 installation. We recommend you use the über jar as you do not have to worry about copying the dependencies jar files as they are already included.
 
-The extension must then be declared in the configuration file of the Warp 10™ instance using the following syntax:
+The extension must then be declared in the configuration file of the Warp 10 instance using the following syntax:
 
 ```properties
 warpscript.extension.NAME = your.extension.package.ANDCLASS
 ```
 
-When the Warp 10™ instance is restarted, the functions declared by the extension will be available in WarpScript™.
+When the Warp 10 instance is restarted, the functions declared by the extension will be available in WarpScript.
 
 # Plugin
 
-A [plugin](https://warp10.io/content/03_Documentation/07_Extending_Warp_10/04_Plugins) is a Java class which can add features to a Warp 10™ instance. The plugin mechanism is very flexible, so the features that can be added are really anything a Java class can do, from launching background threads to listening on a port using a particular protocol, your imagination is the only limit to what plugins can do.
+A [plugin](https://warp10.io/content/03_Documentation/07_Extending_Warp_10/04_Plugins) is a Java class which can add features to a Warp 10 instance. The plugin mechanism is very flexible, so the features that can be added are really anything a Java class can do, from launching background threads to listening on a port using a particular protocol, your imagination is the only limit to what plugins can do.
 
 ## Authoring a plugin
 
@@ -129,7 +129,7 @@ public class TemplateWarp10Plugin extends AbstractWarp10Plugin {
 }
 ```
 
-The `init` method is called when the plugin is registered by the Warp 10™ instance.
+The `init` method is called when the plugin is registered by the Warp 10 instance.
 
 ## Building the plugin
 
@@ -137,19 +137,19 @@ The `jar` and `shadowJar` gradle tasks will build the extension and package it i
 
 ## Deploying the plugin
 
-The jar file of the plugin must be available in the classpath of the Warp 10™ instance, typically by placing it in the `lib` directory of the Warp 10™ installation. We recommend you use the über jar as you do not have to worry about copying the dependencies jar files as they are already included.
+The jar file of the plugin must be available in the classpath of the Warp 10 instance, typically by placing it in the `lib` directory of the Warp 10 installation. We recommend you use the über jar as you do not have to worry about copying the dependencies jar files as they are already included.
 
-The plugin must then be declared in the configuration file of the Warp 10™ instance using the following syntax:
+The plugin must then be declared in the configuration file of the Warp 10 instance using the following syntax:
 
 ```properties
 warpscript.plugin.NAME = your.plugin.package.ANDCLASS
 ```
 
-When the Warp 10™ instance is restarted, the plugin `init` function will be called.
+When the Warp 10 instance is restarted, the plugin `init` function will be called.
 
 # Authentication Plugin
 
-[Authentication plugins](https://www.warp10.io/content/03_Documentation/05_Security/06_Auth_plugins#registering-an-authentication-plugin) are Warp 10™ plugin Java classes which also implement the `io.warp10.continuum.AuthenticationPlugin` interface.
+[Authentication plugins](https://www.warp10.io/content/03_Documentation/05_Security/06_Auth_plugins#registering-an-authentication-plugin) are Warp 10 plugin Java classes which also implement the `io.warp10.continuum.AuthenticationPlugin` interface.
 
 As part of their `init` method, those plugins must register themselves using 
 
